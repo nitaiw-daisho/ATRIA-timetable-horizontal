@@ -66,7 +66,7 @@
       overflow: hidden;
     }
 
-    /* Header */
+    /* ── Header (landscape default) ── */
     .header {
       padding: 22px 48px 18px;
       flex-shrink: 0;
@@ -118,7 +118,23 @@
       flex-shrink: 0;
     }
 
-    /* ── Horizontal class list ── */
+    /* ── Column headers (portrait only) ── */
+    #col-heads {
+      display: none;
+      flex-shrink: 0;
+      background: var(--bg2);
+      border-bottom: 1px solid var(--border);
+    }
+    .col-head {
+      font-size: 0.62rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      font-weight: 400;
+    }
+    .col-head.right { text-align: right; }
+
+    /* ── Class list area ── */
     #classes-list {
       flex: 1;
       overflow: hidden;
@@ -136,15 +152,17 @@
     }
     .list-panel.hidden { opacity: 0; pointer-events: none; }
 
-    /* Day group — horizontal block */
+    /* ── Day group (landscape: horizontal block) ── */
     .day-group {
       display: flex;
       flex-direction: row;
-      flex-shrink: 0;
+      flex: 1;
+      min-width: 0;
       border-right: 1px solid var(--border);
     }
+    .day-group:last-child { border-right: none; }
 
-    /* Vertical day label strip */
+    /* Vertical day label strip (landscape) */
     .day-divider {
       width: 44px;
       flex-shrink: 0;
@@ -165,26 +183,31 @@
       transform: rotate(180deg);
       white-space: nowrap;
     }
+    /* Growing line — hidden in landscape, shown in portrait */
+    .day-divider-line { display: none; }
 
     /* Cards wrapper */
     .cards-wrap {
       display: flex;
       flex-direction: row;
+      flex: 1;
+      min-width: 0;
     }
 
-    /* Individual class card */
+    /* Individual class card (landscape: flex column) */
     .class-card {
-      width: 210px;
-      padding: 24px 20px;
+      flex: 1;
+      min-width: 140px;
+      padding: 24px 16px;
       border-right: 1px solid var(--border);
       position: relative;
       display: flex;
       flex-direction: column;
       gap: 12px;
-      flex-shrink: 0;
       height: 100%;
       animation: fadeIn 0.4s ease both;
     }
+    .class-card:last-child { border-right: none; }
     .class-card.now { background: var(--gold-dim); }
     .class-card.now::before {
       content: '';
@@ -198,6 +221,10 @@
     @keyframes fadeIn {
       from { opacity: 0; transform: translateX(8px); }
       to   { opacity: 1; transform: translateX(0); }
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(6px); }
+      to   { opacity: 1; transform: translateY(0); }
     }
 
     /* Time section */
@@ -230,7 +257,7 @@
       animation: pulse 1.5s ease-in-out infinite;
     }
 
-    /* Divider within card */
+    /* Divider within card (landscape only) */
     .card-rule {
       height: 1px;
       background: var(--border);
@@ -269,7 +296,7 @@
       font-weight: 300;
     }
 
-    /* Spots — pushed to bottom */
+    /* Spots — pushed to bottom in landscape */
     .card-spots-wrap { margin-top: auto; }
     .spots-num { font-size: 1.4rem; font-weight: 500; line-height: 1; }
     .spots-num.open { color: #7BBF90; }
@@ -318,9 +345,117 @@
       color: var(--text-dim);
     }
     .footer-right { font-size: 0.7rem; color: var(--text-dim); letter-spacing: 0.06em; }
+
+    /* ══════════════════════════════════════════════════
+       PORTRAIT MODE  (body.portrait overrides)
+    ══════════════════════════════════════════════════ */
+
+    /* Header: stack vertically, logo centered */
+    body.portrait .header {
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      padding: 24px 32px 18px;
+    }
+    body.portrait .header img   { width: 130px; }
+    body.portrait .header-spacer { display: none; }
+    body.portrait .header-center {
+      flex-direction: row;
+      gap: 20px;
+      align-items: center;
+    }
+    body.portrait .header-date { font-size: 0.8rem; }
+
+    /* Column headers row */
+    body.portrait #col-heads {
+      display: grid;
+      grid-template-columns: 105px 1fr 140px 82px;
+      padding: 10px 48px;
+    }
+
+    /* Panel: column flow */
+    body.portrait .list-panel {
+      flex-direction: column;
+      overflow-y: hidden;
+      overflow-x: hidden;
+    }
+
+    /* Day group: full-width column */
+    body.portrait .day-group {
+      display: block;
+      flex: unset;
+      width: 100%;
+      border-right: none;
+      border-bottom: 1px solid var(--border);
+    }
+
+    /* Day divider: horizontal banner */
+    body.portrait .day-divider {
+      width: auto;
+      height: 48px;
+      flex-direction: row;
+      align-items: center;
+      padding: 0 48px;
+      gap: 16px;
+      border-right: none;
+      border-bottom: 1px solid var(--border);
+    }
+    body.portrait .day-divider-label {
+      writing-mode: horizontal-tb;
+      transform: none;
+      font-size: 0.72rem;
+      flex-shrink: 0;
+    }
+    body.portrait .day-divider-line {
+      display: block;
+      flex: 1;
+      height: 1px;
+      background: var(--gold-line);
+    }
+
+    /* Cards wrap: column of rows */
+    body.portrait .cards-wrap {
+      display: block;
+      flex: unset;
+    }
+
+    /* Class card: becomes a grid row */
+    body.portrait .class-card {
+      flex: unset;
+      width: 100%;
+      height: auto;
+      min-width: 0;
+      display: grid;
+      grid-template-columns: 105px 1fr 140px 82px;
+      align-items: center;
+      padding: 16px 48px;
+      border-right: none;
+      border-bottom: 1px solid var(--border);
+      gap: 0;
+      animation-name: fadeUp;
+    }
+    /* "Now" accent: left border instead of top */
+    body.portrait .class-card.now::before {
+      top: 0; bottom: 0;
+      left: 0; right: auto;
+      width: 3px;
+      height: auto;
+    }
+
+    /* Grid cell adjustments in portrait */
+    body.portrait .card-rule           { display: none; }
+    body.portrait .card-spots-wrap     { margin-top: 0; text-align: right; }
+    body.portrait .card-instructor-label { display: none; }
+    body.portrait .class-instructor    { font-size: 0.82rem; }
+    body.portrait .time-start          { font-size: 1rem; }
   </style>
 </head>
 <body>
+<script>
+  // Set orientation class synchronously before first paint to avoid flash
+  if (window.innerWidth <= window.innerHeight) document.body.classList.add('portrait');
+</script>
 
   <div id="loading" class="screen">
     <img src="https://www.daisho-aus.com/wp-content/uploads/2025/07/logo-atria.png" alt="Atria Wellness Club">
@@ -346,6 +481,8 @@
 
     <div class="header-rule"></div>
 
+    <div id="col-heads"></div>
+
     <div id="classes-list">
       <div id="panel-a" class="list-panel"></div>
       <div id="panel-b" class="list-panel hidden"></div>
@@ -362,6 +499,10 @@
     const REFRESH_MINS        = 5;
     const TICK_SECS           = 30;
     const LOW_SPOTS_THRESHOLD = 3;
+
+    // Portrait row/divider height estimates (must match CSS padding values)
+    const ROW_H     = 80;
+    const DIVIDER_H = 48;
 
     // HTML-encode API-derived strings before injecting into innerHTML
     const ESC = { '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' };
@@ -397,6 +538,10 @@
       timeZone: 'Australia/Brisbane', weekday: 'long', day: 'numeric', month: 'long'
     });
 
+    function isPortrait() {
+      return window.innerWidth <= window.innerHeight;
+    }
+
     function showError(msg) {
       document.getElementById('loading').style.display      = 'none';
       document.getElementById('app').style.display          = 'none';
@@ -407,6 +552,7 @@
     function showApp() {
       document.getElementById('loading').style.display      = 'none';
       document.getElementById('error-screen').style.display = 'none';
+      document.body.classList.toggle('portrait', isPortrait());
       document.getElementById('app').style.display          = 'flex';
       document.getElementById('header-date').textContent    = fmtDate(new Date());
     }
@@ -416,7 +562,7 @@
     async function loadClasses() {
       const now = new Date();
       const todayStart = brisbaneMidnight(now);
-      // Fetch a full week ahead so we always have enough days to fill the screen
+      // Fetch a full week ahead so we always have data for multiple days
       const weekEnd = new Date(now);
       weekEnd.setDate(weekEnd.getDate() + 7);
       weekEnd.setHours(23, 59, 59, 0);
@@ -462,12 +608,22 @@
       }
     }
 
+    // Debounced resize: re-detect orientation and re-render
+    let resizeTimer;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => {
+        if (document.getElementById('app').style.display === 'flex') {
+          const now = new Date();
+          document.body.classList.toggle('portrait', isPortrait());
+          renderClasses(now);
+          document.getElementById('header-date').textContent = fmtDate(now);
+        }
+      }, 150);
+    });
+
     let activePanel = 'a';
     let firstLoad = true;
-
-    // Card width + day label strip width — used to decide how many days fit
-    const CARD_W    = 210;
-    const DIVIDER_W = 44;
 
     function groupByDay(classes) {
       const map = new Map();
@@ -480,10 +636,36 @@
       return Array.from(map.values()).sort((a, b) => a.date - b.date);
     }
 
-    function renderClasses(now) {
-      const screenW = window.innerWidth || 1920;
+    function dayLabel(date, today, tomorrow) {
+      if (date.getTime() === today.getTime())    return `Today · ${fmtDateShort(date)}`;
+      if (date.getTime() === tomorrow.getTime()) return `Tomorrow · ${fmtDateShort(date)}`;
+      return fmtDateShort(date);
+    }
 
-      // Drop classes that have already ended
+    function updateFooterLabel(days, today, daysShown) {
+      const el = document.getElementById('footer-label');
+      if (!el || !days.length) return;
+      const firstIsToday = days[0].date.getTime() === today.getTime();
+      let title;
+      if      (daysShown === 1 && firstIsToday)  title = "Today's Schedule";
+      else if (daysShown >= 2 && firstIsToday)   title = 'Today & Tomorrow';
+      else                                        title = 'Upcoming Schedule';
+      el.innerHTML = `${title} &nbsp;·&nbsp; 180\u2013192 Ann Street, Brisbane`;
+    }
+
+    function updateColHeads() {
+      const el = document.getElementById('col-heads');
+      if (!el) return;
+      if (isPortrait()) {
+        el.innerHTML = '<div class="col-head">Time</div><div class="col-head">Class</div><div class="col-head">Instructor</div><div class="col-head right">Spots</div>';
+      } else {
+        el.innerHTML = '';
+      }
+    }
+
+    // ── Dispatcher ──────────────────────────────────────────────────────────
+    function renderClasses(now) {
+      updateColHeads();
       const visible = cachedClasses.filter(c => new Date(c.endDate) > now);
 
       if (!visible.length) {
@@ -491,54 +673,68 @@
         return;
       }
 
-      const days = groupByDay(visible);
-
-      let html = '';
-      let usedW = 0;
-      let daysUsed = 0;
-
-      const today    = brisbaneMidnight(now);
+      const days    = groupByDay(visible);
+      const today   = brisbaneMidnight(now);
       const tomorrow = new Date(today.getTime() + 86400000);
 
-      for (const day of days) {
-        const dayW = DIVIDER_W + day.rows.length * CARD_W;
-        // Always show at least 1 day; keep adding while there's space
-        if (daysUsed > 0 && usedW + dayW > screenW) break;
+      if (isPortrait()) {
+        renderPortrait(days, now, today, tomorrow);
+      } else {
+        renderLandscape(days, now, today, tomorrow);
+      }
+    }
 
-        const labelDate = day.date;
+    // ── Landscape: exactly 2 days, cards fill width via flex:1 ───────────
+    function renderLandscape(days, now, today, tomorrow) {
+      const shown = days.slice(0, 2);
+      let html = '';
 
-        let label;
-        if (labelDate.getTime() === today.getTime())         label = `Today · ${fmtDateShort(labelDate)}`;
-        else if (labelDate.getTime() === tomorrow.getTime()) label = `Tomorrow · ${fmtDateShort(labelDate)}`;
-        else label = fmtDateShort(labelDate);
-
-        const isFuture = labelDate > today;
-
+      for (const day of shown) {
+        const isFuture = day.date > today;
         html += `<div class="day-group">
           <div class="day-divider">
-            <span class="day-divider-label">${label}</span>
+            <span class="day-divider-label">${dayLabel(day.date, today, tomorrow)}</span>
+          </div>
+          <div class="cards-wrap">
+            ${day.rows.map((c, i) => renderCard(c, i, now, isFuture, firstLoad)).join('')}
+          </div>
+        </div>`;
+      }
+
+      updateFooterLabel(days, today, shown.length);
+      swapPanel(html);
+    }
+
+    // ── Portrait: height-based fitting, vertical rows ────────────────────
+    function renderPortrait(days, now, today, tomorrow) {
+      const listEl  = document.getElementById('classes-list');
+      const availH  = listEl ? listEl.clientHeight : (window.innerHeight - 200);
+
+      let html   = '';
+      let usedH  = 0;
+      let daysUsed = 0;
+
+      for (const day of days) {
+        const neededH = DIVIDER_H + day.rows.length * ROW_H;
+        if (daysUsed > 0 && usedH + neededH > availH) break;
+
+        const isFuture = day.date > today;
+        html += `<div class="day-group">
+          <div class="day-divider">
+            <span class="day-divider-label">${dayLabel(day.date, today, tomorrow)}</span>
+            <span class="day-divider-line"></span>
           </div>
           <div class="cards-wrap">
             ${day.rows.map((c, i) => renderCard(c, i, now, isFuture, firstLoad)).join('')}
           </div>
         </div>`;
 
-        usedW += dayW;
+        usedH += neededH;
         daysUsed++;
       }
 
-      // Update footer label to reflect which days are shown
-      const footerLabel = document.getElementById('footer-label');
-      if (footerLabel) {
-        const firstIsToday = days[0].date.getTime() === today.getTime();
-        let title;
-        if      (daysUsed === 1 && firstIsToday)  title = "Today's Schedule";
-        else if (daysUsed >= 2 && firstIsToday)   title = 'Today & Tomorrow';
-        else                                       title = 'Upcoming Schedule';
-        footerLabel.innerHTML = `${title} &nbsp;·&nbsp; 180\u2013192 Ann Street, Brisbane`;
-      }
-
-      swapPanel(html);
+      updateFooterLabel(days, today, daysUsed);
+      swapPanel(html || '<div class="list-state"><span>No upcoming classes scheduled</span></div>');
     }
 
     function swapPanel(html) {
@@ -587,13 +783,18 @@
                      <div class="spots-lbl">spots</div>`;
       }
 
+      // Four named direct children map to the portrait grid columns:
+      // .card-time | .card-class-info | .card-instructor | .card-spots-wrap
+      // (.card-rule is display:none in portrait, removed from grid flow)
       return `
         <div class="class-card ${cardClass}" style="${animate ? `animation-delay:${i * 0.04}s` : 'animation:none'}">
-          <div>${timeSection}</div>
+          <div class="card-time">${timeSection}</div>
           <div class="card-rule"></div>
-          <div class="class-name">${name}</div>
-          ${zone ? `<div class="class-zone"><span>${escapeHtml(zone)}</span></div>` : ''}
-          <div>
+          <div class="card-class-info">
+            <div class="class-name">${name}</div>
+            ${zone ? `<div class="class-zone"><span>${escapeHtml(zone)}</span></div>` : ''}
+          </div>
+          <div class="card-instructor">
             <div class="card-instructor-label">Instructor</div>
             <div class="class-instructor">${instructor}</div>
           </div>
